@@ -1,0 +1,30 @@
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width">
+  <title>Claim HTTP data</title>
+  <script src="/login/client.js"></script>
+  <script>
+
+  meeshkan.onUser = (user) => {
+    fetch('/http-storage/claim', {
+      method: 'POST',
+      body: JSON.stringify({'access_token': user.accessToken, 'stored_uuid': '${stored_uuid}'})
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      if (data['status'] != 'Ok') {
+        alert('Unable to claim HTTP data');
+      }
+      window.location.href = '/http-storage';
+    });
+  };
+
+  </script>
+</head>
+<body>
+  <h1>Claim HTTP data</h1>
+  <pre id="info"></pre>
+</body>
+</html>
