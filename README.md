@@ -15,5 +15,5 @@ pip install -r requirements.txt -r requirements-dev.txt
 # Running locally
 Run the application with `python main.py`.
 
-- Access it in a browser: http://localhost:8080/schema-builder
+- Access it in a browser: http://localhost:9094/http-storage
 
