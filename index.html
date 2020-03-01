@@ -3,9 +3,6 @@
   <meta name="viewport" content="width=device-width">
   <title>HTTP storage</title>
   <script src="/login/client.js"></script>
-<style>
-   #signedInStatus { position:absolute; top:0; right:0; margin: 1em; }
-</style>
   <script>
 
   meeshkan.onUser = (user) => {
@@ -71,6 +68,7 @@
   </script>
 </head>
 <body>
+  <div id="signedInStatus"></div>
   <h1>HTTP storage</h1>
   <p>Here you can store HTTP traffic data in the <a href="https://meeshkan.github.io/http-types/">HTTP Types</a> format using a UUID key as shown below:</p>
   <p><code>UUID=`uuidgen`</code></p>
@@ -83,7 +81,5 @@
   <h2>About</h2>
   <p>See the <a href="https://github.com/meeshkan/meeshkan-hosted-http-storage">meeshkan-hosted-http-storage repository</a> for how this service is built.</p>
   <p><a href="/">See all services on meeshkan.io</a></p>
-
-  <div id="signedInStatus"></div>
 </body>
 </html>
