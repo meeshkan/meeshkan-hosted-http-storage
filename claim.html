@@ -6,6 +6,11 @@
   <script>
 
   meeshkan.onUser = (user) => {
+    if (!user) {
+      meeshkan.signIn();
+      return;
+    }
+
     fetch('/http-storage/claim', {
       method: 'POST',
       body: JSON.stringify({'access_token': user.accessToken, 'stored_uuid': '${stored_uuid}'})
@@ -25,6 +30,6 @@
 </head>
 <body>
   <h1>Claim HTTP data</h1>
-  <pre id="info"></pre>
+  <p>Your HTTP data is being claimed...</p>
 </body>
 </html>

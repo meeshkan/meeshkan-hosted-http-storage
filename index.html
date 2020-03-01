@@ -1,11 +1,33 @@
 <html lang="en">
 <head>
   <meta name="viewport" content="width=device-width">
-  <title>Claim HTTP data</title>
+  <title>HTTP storage</title>
   <script src="/login/client.js"></script>
+<style>
+   #signedInStatus { position:absolute; top:0; right:0; margin: 1em; }
+</style>
   <script>
 
   meeshkan.onUser = (user) => {
+    let signedInStatus = document.getElementById('signedInStatus');
+    if (user == null) {
+      let signInButton = document.createElement('input');
+      signInButton.setAttribute('type', 'button');
+      signInButton.setAttribute('value', 'Sign in');
+      signInButton.onclick = () => { meeshkan.signIn(); }
+      signedInStatus.appendChild(signInButton);
+      document.getElementById('info').textContent = 'Stored data will show up here after signing in using the button in the top right corner.';
+      return;
+    }
+
+    signedInStatus.innerHTML = '';
+    signedInStatus.appendChild(document.createTextNode('Signed in: ' + user.email + ' '));
+    let signOutButton = document.createElement('input');
+    signOutButton.setAttribute('type', 'button');
+    signOutButton.setAttribute('value', 'Sign out');
+    signOutButton.onclick = () => { meeshkan.signOut(); }
+    signedInStatus.appendChild(signOutButton);
+
     fetch('/http-storage/hosts', {
       method: 'POST',
       body: JSON.stringify({'access_token': user.accessToken})
@@ -14,9 +36,12 @@
       return response.json();
     })
     .then((data) => {
-      if (Object.entries(data).length == 0) return;
-      console.log(data)
       let info = document.getElementById('info');
+      info.innerHTML = '';
+      if (Object.entries(data).length == 0) {
+        info.textContent = 'No data currently stored.';
+      }
+      console.log(data)
       let ul = document.createElement('ui');
       for (const [host, count] of Object.entries(data)) {
         var li = document.createElement('li');
@@ -31,7 +56,7 @@
         li.appendChild(document.createTextNode(' '));
         var schemaButton = document.createElement('input');
         schemaButton.setAttribute('type', 'button');
-        schemaButton.value = 'Schema';
+        schemaButton.value = 'Build schema';
         schemaButton.onclick = () => {
           window.location.href = '/http-storage/generate-schema?host=' + encodeURIComponent(host) + '&access_token=' + encodeURIComponent(user.accessToken);
         };
@@ -46,14 +71,19 @@
   </script>
 </head>
 <body>
-  <h1>HTTP data</h1>
-  <p>To store data:</p>
-  <code>curl --data-binary @recordings.jsonl https://meeshkan.io/http-storage/c3a1af22-70cf-4812-b8f5-4cb4d2436c17</code>
-  <p>Then visit the same URL in the browser to claim it.</p>
-  <div id="info"></div>
+  <h1>HTTP storage</h1>
+  <p>Here you can store HTTP traffic data in the <a href="https://meeshkan.github.io/http-types/">HTTP Types</a> format using a UUID key as shown below:</p>
+  <p><code>UUID=`uuidgen`</code></p>
+  <p><code>curl --data-binary @recordings.jsonl https://meeshkan.io/http-storage/$UUID</code></p>
+  <p>Then visit the same URL in the browser to claim the data.</p>
+
+  <h2>Stored data</h2>
+  <div id="info">Loading...</div>
 
   <h2>About</h2>
   <p>See the <a href="https://github.com/meeshkan/meeshkan-hosted-http-storage">meeshkan-hosted-http-storage repository</a> for how this service is built.</p>
   <p><a href="/">See all services on meeshkan.io</a></p>
+
+  <div id="signedInStatus"></div>
 </body>
 </html>
