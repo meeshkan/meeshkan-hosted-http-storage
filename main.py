@@ -184,7 +184,7 @@ def post(uuid):
                     )
                 except jsonschema.exceptions.ValidationError as error:
                     raise InvalidFormatException(f"Line {line_count}: {error.message}")
-                return f"Stored - visit https://meeshkan.io/http-storage/{uuid} to claim the data\r\n"
+            return f"\r\nStored - visit https://meeshkan.io/http-storage/{uuid} to claim the data\r\n\r\n"
     except InvalidFormatException as error:
         return error.message, 400, {"content-type": "text/plain"}
 
