@@ -1,6 +1,4 @@
 runtime: python37
 service: http-storage
-automatic_scaling:
-  min_instances: 1
 inbound_services:
   - warmup
